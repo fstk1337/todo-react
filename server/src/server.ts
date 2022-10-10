@@ -2,6 +2,8 @@ import express from "express";
 import http from 'http';
 import mongoose from "mongoose";
 import { config } from "./config/config";
+import router from "./routes/Todo";
+import todoRoutes from './routes/Todo';
 
 const server = express();
 
@@ -27,6 +29,8 @@ const startServer = () => {
 
     server.use(express.urlencoded({ extended: true }));
     server.use(express.json());
+
+    server.use('/api/todos', todoRoutes);
 
     server.get('/health', (request, response, next) => {
         return response.status(200).json({ status: 'alive' });
