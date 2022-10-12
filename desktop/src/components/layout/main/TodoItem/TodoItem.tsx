@@ -1,5 +1,5 @@
 import { useState, FC } from "react";
-import { Checkbox, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper } from "@mui/material";
+import { Checkbox, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemSecondaryAction, ListItemText, Paper } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from "@mui/material/styles";
@@ -20,7 +20,7 @@ const StyledPaper = styled(Paper)`
 const TodoItem: FC<TodoItemProps> = (props) => {
     const [checked, setChecked] = useState([0]);
 
-    const handleToggle = (id: number) => () => {
+    const handleTodoClick = (id: number) => () => {
       const currentIndex = checked.indexOf(id);
       const newChecked = [...checked];
 
@@ -31,28 +31,43 @@ const TodoItem: FC<TodoItemProps> = (props) => {
       }
 
       setChecked(newChecked);
+      console.log(`todo #${id} clicked`);
+    };
+
+    const handleEditClick = (id: number) => {
+      console.log(`edit #${id} clicked`);
+    };
+
+    const handleDeleteClick = (id: number) => {
+      console.log(`delete #${id} clicked`);
     };
 
     return (
-        <ListItem key={props.id} disablePadding >
-            <StyledPaper>
-                <ListItemButton role={undefined} onClick={handleToggle(props.id)} dense>
-                <ListItemIcon>
-                    <Checkbox
-                      edge="start"
-                      checked={checked.indexOf(props.id) !== -1}
-                      tabIndex={-1}
-                      disableRipple
-                      inputProps={{ 'aria-labelledby': props.id.toString() }}
-                    />
-                </ListItemIcon>
-                <ListItemText id={props.id.toString()} primary={ props.text } />
-                <IconButton edge="end" aria-label="edit">
+        <ListItem
+            key={props.id}
+            secondaryAction={
+              <>
+                <IconButton edge="end" aria-label="edit" onClick={(event) => handleEditClick(props.id)}>
                   <EditIcon />
                 </IconButton>
-                <IconButton edge="end" aria-label="delete">
+                <IconButton edge="end" aria-label="delete" onClick={(event) => handleDeleteClick(props.id)}>
                   <DeleteIcon />
                 </IconButton>
+              </>
+            }
+            disablePadding >
+            <StyledPaper>
+                <ListItemButton role={undefined} onClick={handleTodoClick(props.id)} dense>
+                  <ListItemIcon>
+                      <Checkbox
+                        edge="start"
+                        checked={checked.indexOf(props.id) !== -1}
+                        tabIndex={-1}
+                        disableRipple
+                        inputProps={{ 'aria-labelledby': props.id.toString() }}
+                      />
+                  </ListItemIcon>
+                  <ListItemText id={props.id.toString()} primary={ props.text } />
                 </ListItemButton>
             </StyledPaper>
         </ListItem>

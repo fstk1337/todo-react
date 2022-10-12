@@ -1,14 +1,21 @@
-import { Button } from '@mui/material';
+import { IconButton } from '@mui/material';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { styled } from '@mui/material/styles';
 
-const StyledButton = styled(Button)`
-    font-weight: 500;
-    font-size: 16px;
+const StyledButton = styled(IconButton)`
+    padding: 10px;
+    color: red;
 `;
 
 const AddTodoButton = () => {
+    const handleAddButtonClick = () => {
+        console.log('add button clicked');
+    };
+
     return (
-        <StyledButton variant='contained' size='small'>Add</StyledButton>
+        <StyledButton onClick={handleAddButtonClick}>
+            <AddCircleOutlineIcon />
+        </StyledButton>
     );
 };
 

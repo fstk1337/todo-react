@@ -1,6 +1,8 @@
+import { Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { ReactElement } from 'react';
 import './App.css';
+import AddTodoButton from './components/button/AddTodoButton';
 import Heading from './components/heading/Heading';
 import TodoItem from './components/layout/main/TodoItem/TodoItem';
 import TodoList from './components/layout/main/TodoList/TodoList';
@@ -28,7 +30,10 @@ const Window = styled('div')`
 function App() {
   return (
     <Window>
-      <Heading text="Today's todo list" />
+      <Stack direction="row">
+        <Heading text="Today's todo list" />
+        <AddTodoButton />
+      </Stack>
       <TodoListWrapper todoList={<TodoList todos={todos}/>} />
     </Window>
   );
