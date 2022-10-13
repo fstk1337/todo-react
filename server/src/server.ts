@@ -1,8 +1,7 @@
-import express from "express";
+import express, { response } from "express";
 import http from 'http';
 import mongoose from "mongoose";
 import { config } from "./config/config";
-import router from "./routes/Todo";
 import todoRoutes from './routes/Todo';
 
 const server = express();
@@ -24,6 +23,13 @@ const startServer = () => {
         response.on('finish', () => {
             console.log(`Response, status: ${response.statusCode}: ${response.statusMessage}`);
         });
+        next();
+    });
+
+    server.use((request, response, next) => {
+        response.header('Access-Control-Allow-Origin', '*');
+        response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+        response.header('Access-Control-Allow-Headers', 'X-Requested-With');
         next();
     });
 
