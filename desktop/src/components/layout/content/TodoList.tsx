@@ -1,5 +1,5 @@
 import { FC, ReactElement } from "react";
-import TodoItemWrapper from "../TodoItem/TodoItemWrapper";
+import TodoItemWrapper from "./TodoItemWrapper";
 
 interface TodoListProps {
     todos: Array<ReactElement>

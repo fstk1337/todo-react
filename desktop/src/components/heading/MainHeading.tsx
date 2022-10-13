@@ -3,17 +3,17 @@ import { FC } from 'react';
 
 const StyledHeading = styled('h1')`
     font-size: 30px;
-    padding: 20px;
+    padding: 10px;
 `;
 
-interface HeadingProps {
+interface MainHeadingProps {
     text: string
 }
 
-const Heading: FC<HeadingProps> = ({ text }) => {
+const MainHeading: FC<MainHeadingProps> = ({ text }) => {
     return (
         <StyledHeading>{ text }</StyledHeading>
     );
 };
 
-export default Heading;
+export default MainHeading;

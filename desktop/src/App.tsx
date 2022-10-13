@@ -1,12 +1,13 @@
-import { Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { ReactElement } from 'react';
 import './App.css';
-import AddTodoButton from './components/button/AddTodoButton';
-import Heading from './components/heading/Heading';
-import TodoItem from './components/layout/main/TodoItem/TodoItem';
-import TodoList from './components/layout/main/TodoList/TodoList';
-import TodoListWrapper from './components/layout/main/TodoList/TodoListWrapper';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import MainHeading from './components/heading/MainHeading';
+import TodoItem from './components/layout/content/TodoItem';
+import TodoList from './components/layout/content/TodoList';
+import TodoListWrapper from './components/layout/content/TodoListWrapper';
+import AddTodoForm from './components/layout/header/AddTodoForm';
+import Header from './components/layout/header/Header';
 
 const todos: Array<ReactElement> = [
   <TodoItem id={1} text="Make me happy" />,
@@ -27,13 +28,11 @@ const Window = styled('div')`
     align-items: center;
 `;
 
+
 function App() {
   return (
     <Window>
-      <Stack direction="row">
-        <Heading text="Today's todo list" />
-        <AddTodoButton />
-      </Stack>
+      <Header Icon={<AddCircleOutlineIcon />} Heading={<MainHeading text="Today's todo list" />} Form={<AddTodoForm />} />
       <TodoListWrapper todoList={<TodoList todos={todos}/>} />
     </Window>
   );

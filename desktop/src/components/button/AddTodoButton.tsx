@@ -1,20 +1,15 @@
-import { IconButton } from '@mui/material';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-const StyledButton = styled(IconButton)`
+const StyledButton = styled(Button)`
     padding: 10px;
-    color: red;
 `;
 
 const AddTodoButton = () => {
-    const handleAddButtonClick = () => {
-        console.log('add button clicked');
-    };
 
     return (
-        <StyledButton onClick={handleAddButtonClick}>
-            <AddCircleOutlineIcon />
+        <StyledButton variant="contained" type="submit">
+            Add
         </StyledButton>
     );
 };
