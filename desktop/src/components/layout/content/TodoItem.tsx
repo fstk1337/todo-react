@@ -4,12 +4,22 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from "@mui/material/styles";
 
-interface TodoItemProps {
-    id: number,
-    text: string,
-    active?: boolean,
-    completed?: boolean
+export interface TodoItemProps {
+    _id: string,
+    category: string,
+    description: string,
+    priority: string,
+    started?: String,
+    deadline?: string,
+    status: string,
+    finished?: string,
+    createdAt: string,
+    updatedAt: string
 };
+
+interface CheckedItem {
+    id: string
+}
 
 const StyledPaper = styled(Paper)`
     display: block;
@@ -18,14 +28,14 @@ const StyledPaper = styled(Paper)`
 `;
 
 const TodoItem: FC<TodoItemProps> = (props) => {
-    const [checked, setChecked] = useState([0]);
+    const [checked, setChecked]: [Array<CheckedItem>, Function] = useState([]);
 
-    const handleTodoClick = (id: number) => () => {
-      const currentIndex = checked.indexOf(id);
+    const handleTodoClick = (id: string) => () => {
+      const currentIndex = checked.findIndex((todo) => todo.id === id);
       const newChecked = [...checked];
 
       if (currentIndex === -1) {
-        newChecked.push(id);
+        newChecked.push({id});
       } else {
         newChecked.splice(currentIndex, 1);
       }
@@ -34,40 +44,40 @@ const TodoItem: FC<TodoItemProps> = (props) => {
       console.log(`todo #${id} clicked`);
     };
 
-    const handleEditClick = (id: number) => {
+    const handleEditClick = (id: string) => {
       console.log(`edit #${id} clicked`);
     };
 
-    const handleDeleteClick = (id: number) => {
+    const handleDeleteClick = (id: string) => {
       console.log(`delete #${id} clicked`);
     };
 
     return (
         <ListItem
-            key={props.id}
+            key={props._id}
             secondaryAction={
               <>
-                <IconButton edge="end" aria-label="edit" onClick={(event) => handleEditClick(props.id)}>
+                <IconButton edge="end" aria-label="edit" onClick={(event) => handleEditClick(props._id)}>
                   <EditIcon />
                 </IconButton>
-                <IconButton edge="end" aria-label="delete" onClick={(event) => handleDeleteClick(props.id)}>
+                <IconButton edge="end" aria-label="delete" onClick={(event) => handleDeleteClick(props._id)}>
                   <DeleteIcon />
                 </IconButton>
               </>
             }
             disablePadding >
             <StyledPaper>
-                <ListItemButton role={undefined} onClick={handleTodoClick(props.id)} dense>
+                <ListItemButton role={undefined} onClick={handleTodoClick(props._id)} dense>
                   <ListItemIcon>
                       <Checkbox
                         edge="start"
-                        checked={checked.indexOf(props.id) !== -1}
+                        checked={checked.findIndex((todo) => todo.id === props._id) !== -1}
                         tabIndex={-1}
                         disableRipple
-                        inputProps={{ 'aria-labelledby': props.id.toString() }}
+                        inputProps={{ 'aria-labelledby': props._id }}
                       />
                   </ListItemIcon>
-                  <ListItemText id={props.id.toString()} primary={ props.text } />
+                  <ListItemText id={props._id} primary={ props.description } />
                 </ListItemButton>
             </StyledPaper>
         </ListItem>
@@ -75,8 +85,12 @@ const TodoItem: FC<TodoItemProps> = (props) => {
 };
 
 TodoItem.defaultProps = {
-  active: true,
-  completed: false
+  category: 'general',
+  priority: 'normal',
+  started: '',
+  deadline: '',
+  status: 'active',
+  finished: ''
 };
 
 {/* <ListItem
