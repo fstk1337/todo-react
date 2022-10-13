@@ -7,7 +7,7 @@ import TodoList from './components/layout/content/TodoList';
 import TodoListWrapper from './components/layout/content/TodoListWrapper';
 import AddTodoForm from './components/layout/header/AddTodoForm';
 import Header from './components/layout/header/Header';
-import instance from './services/api';
+import api from './services/api';
 
 const Window = styled('div')`
     display: flex;
@@ -23,7 +23,7 @@ const App = () => {
   const [todos, setTodos] = useState([]);
 
   const getTodos = () => {
-    instance.get('/todos')
+    api.getAll()
       .then((response) => {
         const data = response.data.todos;
         setTodos(data);

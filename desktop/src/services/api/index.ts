@@ -1,12 +1,5 @@
-import axios from 'axios';
-const BASE_URL = 'http://localhost:9090/api';
+import instance from "./instance";
+import todoModule from "./todo";
 
-const instance = axios.create({
-    baseURL: BASE_URL,
-    withCredentials: false,
-    headers: {
-        accept: 'application/json'
-    }
-});
-
-export default instance;
+const api = todoModule(instance);
+export default api;

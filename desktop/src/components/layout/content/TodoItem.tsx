@@ -9,7 +9,7 @@ export interface TodoItemProps {
     category: string,
     description: string,
     priority: string,
-    started?: String,
+    started?: string,
     deadline?: string,
     status: string,
     finished?: string,
@@ -19,7 +19,7 @@ export interface TodoItemProps {
 
 interface CheckedItem {
     id: string
-}
+};
 
 const StyledPaper = styled(Paper)`
     display: block;
@@ -71,7 +71,7 @@ const TodoItem: FC<TodoItemProps> = (props) => {
                   <ListItemIcon>
                       <Checkbox
                         edge="start"
-                        checked={checked.findIndex((todo) => todo.id === props._id) !== -1}
+                        checked={props.status === 'completed'}
                         tabIndex={-1}
                         disableRipple
                         inputProps={{ 'aria-labelledby': props._id }}
