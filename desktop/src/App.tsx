@@ -4,7 +4,6 @@ import './App.css';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MainHeading from './components/heading/MainHeading';
 import TodoList from './components/layout/content/TodoList';
-import TodoListWrapper from './components/layout/content/TodoListWrapper';
 import AddTodoForm from './components/layout/header/AddTodoForm';
 import Header from './components/layout/header/Header';
 import api from './services/api';
@@ -42,8 +41,11 @@ const App = () => {
 
   return (
     <Window>
-      <Header Icon={<AddCircleOutlineIcon />} Heading={<MainHeading text="Today's todo list" />} Form={<AddTodoForm />} />
-      <TodoListWrapper todoList={<TodoList todos={todos}/>} />
+      <Header
+        Icon={<AddCircleOutlineIcon />}
+        Heading={<MainHeading text="Today's todo list" />}
+        Form={<AddTodoForm />} />
+      <TodoList todos={todos} />
     </Window>
   );
 };

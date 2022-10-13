@@ -1,4 +1,3 @@
-import { CheckBox } from '@mui/icons-material';
 import { Checkbox } from '@mui/material';
 import { styled } from '@mui/material/styles';
 

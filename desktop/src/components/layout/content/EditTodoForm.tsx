@@ -1,17 +1,21 @@
-import NewTodoInput from '../../input/NewTodoInput';
-import AddTodoButton from '../../button/AddTodoButton';
-import { ChangeEvent, EventHandler, FormEvent, FormEventHandler, useState } from 'react';
+import EditTodoInput from '../../input/EditTodoInput';
+import { ChangeEvent, EventHandler, FC, FormEvent, FormEventHandler, useState } from 'react';
 import { styled } from '@mui/material/styles';
 
 const StyledForm = styled('form')`
     display: inline-flex;
-    width: 100%;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    margin-left: 30px;
+    width: 100%;
 `;
 
-const AddTodoForm = () => {
-    const [todoText, setTodoText] = useState('');
+interface EditTodoFormProps {
+    text: string,
+};
+
+const EditTodoForm: FC<EditTodoFormProps> = (props) => {
+    const [todoText, setTodoText] = useState(props.text);
 
     const handleChange: EventHandler<ChangeEvent> = (event: ChangeEvent<HTMLInputElement>) => {
         console.log(todoText);
@@ -25,10 +29,9 @@ const AddTodoForm = () => {
 
     return (
         <StyledForm onSubmit={(event: FormEvent) => handleSubmit(event)}>
-            <NewTodoInput onChange={(event: ChangeEvent) => handleChange(event)} />
-            <AddTodoButton />
+            <EditTodoInput text={todoText} onChange={(event: ChangeEvent) => handleChange(event)} />
         </StyledForm>
     );
 };
 
-export default AddTodoForm;
+export default EditTodoForm;
