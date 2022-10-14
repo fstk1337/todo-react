@@ -18,10 +18,10 @@ const TodoSchema: Schema = new Schema(
         category: { type: String, required: false, default: TODO.CATEGORY.GENERAL },
         description: { type: String, required: true},
         priority: { type: String, required: false, default: TODO.PRIORITY.NORMAL },
-        started: { type: Date, required: false, default: null },
-        deadline: { type: Date, required: false, default: null },
+        started: { type: Date, required: false, default: new Date(0) },
+        deadline: { type: Date, required: false, default: new Date(0) },
         status: { type: String, required: false, default: TODO.STATUS.CREATED },
-        finished: { type: Date, required: false, default: null }
+        finished: { type: Date, required: false, default: new Date(0) }
     },
     {
         timestamps: true,
