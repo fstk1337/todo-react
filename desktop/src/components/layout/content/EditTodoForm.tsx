@@ -11,24 +11,20 @@ const StyledForm = styled('form')`
 `;
 
 interface EditTodoFormProps {
+    id: string,
     text: string,
+    onSubmit: Function
 };
 
 const EditTodoForm: FC<EditTodoFormProps> = (props) => {
     const [todoText, setTodoText] = useState(props.text);
 
     const handleChange: EventHandler<ChangeEvent> = (event: ChangeEvent<HTMLInputElement>) => {
-        console.log(todoText);
         setTodoText(event.target.value);
     };
 
-    const handleSubmit:FormEventHandler = (event: FormEvent) => {
-        event.preventDefault();
-        console.log('submit');
-    };
-
     return (
-        <StyledForm onSubmit={(event: FormEvent) => handleSubmit(event)}>
+        <StyledForm id={props.id} onSubmit={(event: FormEvent) => props.onSubmit(event)}>
             <EditTodoInput text={todoText} onChange={(event: ChangeEvent) => handleChange(event)} />
         </StyledForm>
     );

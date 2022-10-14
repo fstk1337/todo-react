@@ -1,7 +1,12 @@
 import { AxiosInstance } from "axios";
 const URL = '/todos';
 
-interface Todo {
+export interface PoorTodo {
+    _id: string,
+    description: string
+}
+
+export interface Todo extends PoorTodo {
     _id: string,
     category: string,
     description: string,
@@ -22,11 +27,11 @@ const todoModule = (instance: AxiosInstance) => {
         get(todoId: string) {
             return instance.get(`${URL}/${todoId}`);
         },
-        create(payload: Todo) {
+        create(payload: PoorTodo) {
             return instance.post(`${URL}`, payload);
         },
-        update(payload: Todo) {
-            return instance.put(`${URL}`, payload);
+        update(payload: PoorTodo) {
+            return instance.patch(`${URL}/${payload._id}`, payload);
         },
         delete(todoId: string) {
             return instance.delete(`${URL}/${todoId}`);

@@ -14,22 +14,16 @@ const StyledTextField = styled(TextField)`
 
 interface EditTodoInputProps {
     text: string,
-    onChange: EventHandler<ChangeEvent>
+    onChange: Function
 };
 
 const EditTodoInput: FC<EditTodoInputProps> = (props) => {
-    const [text, setText] = useState(props.text);
-
-    const changeHandler = ((event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        setText(event.target.value);
-        console.log(text);
-    });
 
     return (
         <StyledTextField
             variant='standard'
-            value={text}
-            onChange={event => changeHandler(event)}
+            value={props.text}
+            onChange={(event) => props.onChange(event)}
             InputProps={{ disableUnderline: true, autoFocus: true, }}
         />
     );
