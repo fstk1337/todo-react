@@ -1,9 +1,10 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance, AxiosResponse } from "axios";
 const URL = '/todos';
 
 export interface PoorTodo {
     _id: string,
-    description: string
+    description: string,
+    status: string
 }
 
 export interface Todo extends PoorTodo {
@@ -27,7 +28,7 @@ const todoModule = (instance: AxiosInstance) => {
         get(todoId: string) {
             return instance.get(`${URL}/${todoId}`);
         },
-        create(payload: PoorTodo) {
+        create(payload: {description: string, status: string }) {
             return instance.post(`${URL}`, payload);
         },
         update(payload: PoorTodo) {
@@ -35,6 +36,10 @@ const todoModule = (instance: AxiosInstance) => {
         },
         delete(todoId: string) {
             return instance.delete(`${URL}/${todoId}`);
+        },
+        toggleCompleted(payload: PoorTodo) {
+            const status = payload.status === 'completed' ? 'active' : 'completed';
+            return instance.patch(`${URL}${payload._id}`, {...payload, status});
         }
     };
 };

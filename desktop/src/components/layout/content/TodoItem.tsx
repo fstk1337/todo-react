@@ -6,21 +6,12 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import DoneIcon from '@mui/icons-material/Done';
 
 import { styled } from "@mui/material/styles";
-import EditTodoForm from "./EditTodoForm";
-import api from '../../../services/api';
-import { PoorTodo, Todo } from '../../../services/api/todo';
+import { PoorTodo } from '../../../services/api/todo';
+import { useDispatch, useSelector } from "react-redux";
+import EditTodoInput from "../../input/EditTodoInput";
 
 interface TodoItemProps {
-    _id: string,
-    category: string,
-    description: string,
-    priority: string,
-    started?: string,
-    deadline?: string,
-    status: string,
-    finished?: string,
-    createdAt: string,
-    updatedAt: string,
+    id: string,
     onTodoClick: Function,
     onDeleteClick: Function
 };
@@ -40,13 +31,22 @@ const StyledPaper = styled(Paper)`
     min-height: 50px;
 `;
 
-const TodoItem: FC<TodoItemProps> = (props) => {
-    const [text, setText]: [string, Function] = useState(props.description);
-    const [editing, setEditing]: [boolean, Function] = useState(false);
+const StyledForm = styled('form')`
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 30px;
+    width: 100%;
+`;
 
-    const handleChange = (id: string) => () => {
-      console.log(`todo #${id} changing text...`);
-    };
+const TodoItem: FC<TodoItemProps> = (props) => {
+    const dispatch = useDispatch();
+    const todo: PoorTodo = useSelector((state: Array<PoorTodo>) => {
+      const index = state.findIndex((todo: PoorTodo) => todo._id === props.id);
+      return state[index];
+    });
+    const [text, setText] = useState(todo.description);
+    const [editing, setEditing]: [boolean, Function] = useState(false);
 
     const handleEditClick = (id: string) => {
       setEditing(true);
@@ -54,65 +54,55 @@ const TodoItem: FC<TodoItemProps> = (props) => {
     };
 
     const handleCancelClick = (id: string) => {
+      setText(todo.description);
       setEditing(false);
       console.log(`cancel #${id} clicked`);
     };
 
-    const handleConfirmClick = (event: React.FormEvent, id: string) => {
-      const form = event;
-      console.log(form);
-      setEditing(false);
-      console.log(`confirm #${id} clicked`);
-    };
+    const handleChange: EventHandler<ChangeEvent> = (event: ChangeEvent<HTMLInputElement>) => {
+      setText(event.target.value);
+  };
 
-    const editDescription = (id: string, text: string) => {
-      const todo:PoorTodo = { _id: id, description: text };
-      api.update(todo)
-          .then((response) => {
-              console.log(response.data.todo);
-          })
-          .catch((error) => {
-              console.log(error);
-          });
-    };
-
-
-    const handleSubmit:FormEventHandler = (event: FormEvent) => {
+  const handleSubmit: FormEventHandler = (event: FormEvent) => {
       event.preventDefault();
-      editDescription(props._id, text);
+      const newTodo:PoorTodo = {...todo, description: text};
+      dispatch({type: 'UPDATE_TODO', payload: {...newTodo}});
+      setEditing(false);
       console.log('submit');
-    };
+  }
+
+   
 
     if (!editing)
 
     return (
         <StyledWrapper>
           <ListItem
-              key={props._id}
+              key={todo._id}
               secondaryAction={
                 <>
-                  <IconButton edge="end" aria-label="edit" onClick={(event) => handleEditClick(props._id)}>
+                  <IconButton edge="end" aria-label="edit" onClick={(event) => handleEditClick(todo._id)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton edge="end" aria-label="delete" onClick={(id) => props.onDeleteClick(props._id)}>
+                  <IconButton edge="end" aria-label="delete" onClick={(id) => props.onDeleteClick(todo._id)}>
                     <DeleteIcon />
                   </IconButton>
                 </>
               }
               disablePadding >
               <StyledPaper>
-                  <ListItemButton role={undefined} onClick={(id) => props.onTodoClick(props._id)} dense>
+                  <ListItemButton role={undefined} onClick={(id) => props.onTodoClick(todo._id)} dense>
                     <ListItemIcon>
                         <Checkbox
                           edge="start"
-                          checked={props.status === 'completed'}
+                          checked={todo.status === 'completed'}
                           tabIndex={-1}
                           disableRipple
-                          inputProps={{ 'aria-labelledby': props._id }}
+                          inputProps={{ 'aria-labelledby': todo._id }}
                         />
                     </ListItemIcon>
                     <ListItemText
-                        id={props._id}
+                        id={todo._id}
                         primary={text}
                         primaryTypographyProps={{fontSize: '16px'}}
                     />
@@ -125,13 +115,13 @@ const TodoItem: FC<TodoItemProps> = (props) => {
     return (
       <StyledWrapper>
         <ListItem
-          key={props._id}
+          key={todo._id}
           secondaryAction={
             <>
-              <IconButton edge="end" aria-label="cancel" onClick={(event) => handleCancelClick(props._id)}>
+              <IconButton edge="end" aria-label="cancel" onClick={(event) => handleCancelClick(todo._id)}>
                 <CancelIcon />
               </IconButton>
-              <IconButton edge="end" aria-label="confirm" form={`form-${props._id}`} name="submit" type="submit" onSubmit={(event: React.FormEvent) => handleConfirmClick(event, props._id)}>
+              <IconButton edge="end" aria-label="confirm" form={`form-${todo._id}`} name="submit" type="submit">
                 <DoneIcon />
               </IconButton>
             </>
@@ -139,20 +129,13 @@ const TodoItem: FC<TodoItemProps> = (props) => {
           disablePadding
         >
           <StyledPaper>
-            <EditTodoForm id={`form-${props._id}`} text={text} onSubmit={handleSubmit} />
+            <StyledForm id={`form-${todo._id}`} onSubmit={handleSubmit}>
+              <EditTodoInput text={text} onChange={(event: ChangeEvent) => handleChange(event)} />
+            </StyledForm>
           </StyledPaper>
         </ListItem>
       </StyledWrapper>
     );
-};
-
-TodoItem.defaultProps = {
-  category: 'general',
-  priority: 'normal',
-  started: '',
-  deadline: '',
-  status: 'active',
-  finished: ''
 };
 
 export default TodoItem;
