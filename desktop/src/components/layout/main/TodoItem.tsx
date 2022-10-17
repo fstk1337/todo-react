@@ -1,4 +1,4 @@
-import React, { useState, FC, ChangeEvent, EventHandler, MouseEventHandler, useRef, FormEventHandler, FormEvent, MouseEvent } from "react";
+import { useState, FC, ChangeEvent, EventHandler, FormEventHandler, FormEvent } from "react";
 import { Checkbox, Container, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -6,11 +6,10 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import DoneIcon from '@mui/icons-material/Done';
 
 import { styled } from "@mui/material/styles";
-import { IPoorTodo, ITodo } from '../../../services/api/todo.types';
-import { useDispatch, useSelector } from "react-redux";
 import EditTodoInput from "../../input/EditTodoInput";
 import { useAppDispatch } from "../../../redux/store/hooks";
-import { RootState } from "../../../redux/store";
+import ConfirmDeleteDialog from "../../dialog/ConfirmDeleteDialog";
+import { ITodo } from "../../../services/api/todo.types";
 
 interface TodoItemProps {
     item: ITodo,
@@ -45,6 +44,7 @@ const TodoItem: FC<TodoItemProps> = (props) => {
     const dispatch = useAppDispatch();
     const todo = {...props.item };
     const [text, setText] = useState(todo.description);
+    const [open, setOpen] = useState<boolean>(false);
     const [editing, setEditing]: [boolean, Function] = useState(false);
 
     const handleEditClick = (id: string) => {
@@ -68,6 +68,15 @@ const TodoItem: FC<TodoItemProps> = (props) => {
       console.log('submit');
   }
 
+  const handleConfirm = () => {
+      props.onDeleteClick(props.item._id);
+      setOpen(false);
+  };
+
+  const handleReject = () => {
+      setOpen(false);
+  };
+
    
 
     if (!editing)
@@ -81,7 +90,7 @@ const TodoItem: FC<TodoItemProps> = (props) => {
                   <IconButton edge="end" aria-label="edit" onClick={(event) => handleEditClick(todo._id)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton edge="end" aria-label="delete" onClick={(event) => props.onDeleteClick(props.item._id)}>
+                  <IconButton edge="end" aria-label="delete" onClick={(event) => setOpen(true)}>
                     <DeleteIcon />
                   </IconButton>
                 </>
@@ -106,6 +115,12 @@ const TodoItem: FC<TodoItemProps> = (props) => {
                   </ListItemButton>
               </StyledPaper>
           </ListItem>
+          <ConfirmDeleteDialog
+            isOpen={open}
+            description={todo.description}
+            onConfirm={handleConfirm}
+            onReject={handleReject}
+          />
         </StyledWrapper>
     );
 

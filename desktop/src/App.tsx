@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import './App.css';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MainHeading from './components/heading/MainHeading';
-import TodoList from './components/layout/content/TodoList';
+import TodoList from './components/layout/main/TodoList';
 import AddTodoForm from './components/layout/header/AddTodoForm';
 import Header from './components/layout/header/Header';
 
