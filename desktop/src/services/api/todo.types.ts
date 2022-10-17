@@ -11,6 +11,6 @@ export interface ITodo extends IPoorTodo {
     started:     Date;
     deadline:    Date;
     finished:    Date;
-    createdAt:   Date;
-    updatedAt:   Date;
+    createdAt?:   Date;
+    updatedAt?:   Date;
 };

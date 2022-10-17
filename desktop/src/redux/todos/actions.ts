@@ -1,88 +1,53 @@
 import { TodoActionType } from './actionType';
 import { AnyAction } from 'redux';
 import { IState } from './initialState';
+import { ITodo } from '../../services/api/todo.types';
 
 export interface TodoAction extends AnyAction {
     type: TodoActionType,
-    payload?: any
-}
+    payload: {
+        todos?: ITodo[],
+        todo?: ITodo,
+        id?: string,
+        message?: string
+    }
+};
 
 const todosLoadStart = ():TodoAction => ({
-    type: TodoActionType.TODOS_LOAD_START
+    type: TodoActionType.TODOS_LOAD_START,
+    payload: {}
 });
 
 const todosLoadSuccess = (response: IState):TodoAction => ({
     type: TodoActionType.TODOS_LOAD_SUCCESS,
-    payload: response.todos
+    payload: { todos: response.todos }
 });
 
 const todosLoadError = (errorMessage: string):TodoAction => ({
     type: TodoActionType.TODOS_LOAD_ERROR,
-    payload: errorMessage
+    payload: { message: errorMessage }
+});
+
+const todoToggleComplete = (todo: ITodo):TodoAction => ({
+    type: TodoActionType.TODO_TOGGLE_COMPLETE,
+    payload: { todo }
+});
+
+const deleteTodo = (id: string):TodoAction => ({
+    type: TodoActionType.DELETE_TODO,
+    payload: { id }
+});
+
+const addTodo = (todo: ITodo):TodoAction => ({
+    type: TodoActionType.ADD_TODO,
+    payload: { todo }
 });
 
 export default {
     todosLoadStart,
     todosLoadSuccess,
-    todosLoadError
+    todosLoadError,
+    todoToggleComplete,
+    deleteTodo,
+    addTodo
 };
-
-// export const createTodo = (description: string, status: string) => async(dispatch: Dispatch<TodoAction>) => {
-//     const result = await api.create({ description, status })
-//         .then((response) => {
-//             return dispatch({
-//                 type: ADD_TODO,
-//                 payload: response.data.todo
-//             });
-//         })
-//         .catch(error => console.log(error));
-//     return result;
-// };
-
-// export const getAllTodos = () => async(dispatch: Dispatch<TodoAction>) => {
-//     const result = await api.getAll()
-//         .then((response) => {
-//             return dispatch({
-//                 type: GET_TODOS,
-//                 payload: response.data.todos
-//             });
-//         })
-//         .catch(error => console.log(error));
-//     return result;
-// };
-
-// export const updateTodo = (_id: string, description: string, status: string) => async(dispatch: Dispatch<TodoAction>) => {
-//     const result = await api.update({_id, description, status})
-//         .then((response) => {
-//             return dispatch({
-//                 type: UPDATE_TODO,
-//                 payload: response.data.todo
-//             })
-//         })
-//         .catch(error => console.log(error));
-//     return result;
-// };
-
-// export const deleteTodo = (id: string) => async(dispatch: Dispatch<TodoAction>) => {
-//     const result = await api.delete(id)
-//         .then((response) => {
-//             return dispatch({
-//                 type: DELETE_TODO,
-//                 payload: response.data.todo
-//             });
-//         })
-//         .catch(error => console.log(error));
-//     return result;
-// };
-
-// export const toggleCompleted = (todo: PoorTodo) => async(dispatch: Dispatch<TodoAction>) => {
-//     const result = await api.toggleCompleted(todo)
-//         .then(response => {
-//             return dispatch({
-//                 type: TOGGLE_COMPLETED,
-//                 payload: response.data.todo
-//             });
-//         })
-//         .catch(error => console.log(error));
-//     return result;
-// };

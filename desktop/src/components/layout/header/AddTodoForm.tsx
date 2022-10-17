@@ -2,7 +2,9 @@ import NewTodoInput from '../../input/NewTodoInput';
 import AddTodoButton from '../../button/AddTodoButton';
 import { ChangeEvent, EventHandler, FormEvent, FormEventHandler, useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../../redux/store/hooks';
+import { IPoorTodo } from '../../../services/api/todo.types';
+import { addTodo } from '../../../redux/todos/thunks';
 
 const StyledForm = styled('form')`
     display: inline-flex;
@@ -12,7 +14,7 @@ const StyledForm = styled('form')`
 `;
 
 const AddTodoForm = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const [todoText, setTodoText] = useState('');
 
     const handleChange: EventHandler<ChangeEvent> = (event: ChangeEvent<HTMLInputElement>) => {
@@ -21,10 +23,12 @@ const AddTodoForm = () => {
 
     const handleSubmit:FormEventHandler = (event: FormEvent) => {
         event.preventDefault();
-        if (todoText.length > 0) {
-            const newTodo = { _id: new Date().getMilliseconds().toString(), description: todoText, status: 'active'};
-            dispatch({type: 'ADD_TODO', payload: {...newTodo}});
+        const newTodo:IPoorTodo = {
+            _id: '-1',
+            description: todoText,
+            status: 'active',
         };
+        dispatch(addTodo(newTodo));
         setTodoText('');
     };
 

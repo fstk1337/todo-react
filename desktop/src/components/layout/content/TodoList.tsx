@@ -3,22 +3,9 @@ import { styled } from '@mui/material/styles';
 import TodoItem from "./TodoItem";
 import { IState } from "../../../redux/todos/initialState";
 import { useEffect } from "react";
-import { loadTodos } from "../../../redux/todos/thunks";
+import { deleteTodo, loadTodos, todoToggleComplete } from "../../../redux/todos/thunks";
 import { useAppSelector, useAppDispatch } from "../../../redux/store/hooks";
-import store from "../../../redux/store";
-
-interface Todo {
-    "_id": string,
-    "category": string,
-    "description": string,
-    "priority": string,
-    "started": string,
-    "deadline": string,
-    "status": string,
-    "finished": string,
-    "createdAt": string,
-    "updatedAt": string
-}
+import { ITodo } from "../../../services/api/todo.types";
 
 const StyledWrapper = styled(Container)`
     padding: 20px;
@@ -42,22 +29,22 @@ const TodoList = () => {
         dispatch(loadTodos());
     }, []);
 
-    const toggleCompleted = (todoId: string) => {
-    };
+    const handleTodoClick = (todo: ITodo) => dispatch(todoToggleComplete(todo));
 
-    const deleteTodo = (todoId: string) => {
-    };
+    const handleDeleteClick = (id: string) => dispatch(deleteTodo(id));
 
     return (
         <StyledWrapper>
-            { isLoading && <h3>Loading...</h3> }
+            { isLoading ? <h3>Loading...</h3>
+                :todos.length === 0 && <EmptyListMessage>Today you have nothing to do</EmptyListMessage>
+            }
             {
                 todos.map((todo) => {
                     return <TodoItem 
                         key={todo._id} 
-                        id={todo._id}
-                        onTodoClick={(id: string) => toggleCompleted(id)}
-                        onDeleteClick={(id: string) => deleteTodo(id)}
+                        item={todo}
+                        onTodoClick={(todo: ITodo) => handleTodoClick(todo)}
+                        onDeleteClick={(id: string) => handleDeleteClick(id)}
                     />
                 })
             }

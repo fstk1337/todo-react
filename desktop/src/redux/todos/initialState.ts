@@ -1,8 +1,8 @@
-import { IPoorTodo } from "../../services/api/todo.types";
+import { ITodo } from "../../services/api/todo.types";
 
 export interface IState {
     isLoading: boolean,
-    todos: IPoorTodo[]
+    todos: ITodo[]
     errorMessage: string
 };
 

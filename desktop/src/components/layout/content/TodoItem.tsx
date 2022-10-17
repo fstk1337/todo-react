@@ -1,4 +1,4 @@
-import { useState, FC, ChangeEvent, EventHandler, MouseEventHandler, useRef, FormEventHandler, FormEvent } from "react";
+import React, { useState, FC, ChangeEvent, EventHandler, MouseEventHandler, useRef, FormEventHandler, FormEvent, MouseEvent } from "react";
 import { Checkbox, Container, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -6,13 +6,14 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import DoneIcon from '@mui/icons-material/Done';
 
 import { styled } from "@mui/material/styles";
-import { IPoorTodo } from '../../../services/api/todo.types';
+import { IPoorTodo, ITodo } from '../../../services/api/todo.types';
 import { useDispatch, useSelector } from "react-redux";
 import EditTodoInput from "../../input/EditTodoInput";
-import { IState } from "../../../redux/todos/initialState";
+import { useAppDispatch } from "../../../redux/store/hooks";
+import { RootState } from "../../../redux/store";
 
 interface TodoItemProps {
-    id: string,
+    item: ITodo,
     onTodoClick: Function,
     onDeleteClick: Function
 };
@@ -41,11 +42,8 @@ const StyledForm = styled('form')`
 `;
 
 const TodoItem: FC<TodoItemProps> = (props) => {
-    const dispatch = useDispatch();
-    const todo: IPoorTodo = useSelector((state: IState) => {
-      const index = state.todos.findIndex((todo: IPoorTodo) => todo._id === props.id);
-      return state.todos[index];
-    });
+    const dispatch = useAppDispatch();
+    const todo = {...props.item };
     const [text, setText] = useState(todo.description);
     const [editing, setEditing]: [boolean, Function] = useState(false);
 
@@ -66,8 +64,6 @@ const TodoItem: FC<TodoItemProps> = (props) => {
 
   const handleSubmit: FormEventHandler = (event: FormEvent) => {
       event.preventDefault();
-      const newTodo:IPoorTodo = {...todo, description: text};
-      dispatch({type: 'UPDATE_TODO', payload: {...newTodo}});
       setEditing(false);
       console.log('submit');
   }
@@ -85,14 +81,14 @@ const TodoItem: FC<TodoItemProps> = (props) => {
                   <IconButton edge="end" aria-label="edit" onClick={(event) => handleEditClick(todo._id)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton edge="end" aria-label="delete" onClick={(id) => props.onDeleteClick(todo._id)}>
+                  <IconButton edge="end" aria-label="delete" onClick={(event) => props.onDeleteClick(props.item._id)}>
                     <DeleteIcon />
                   </IconButton>
                 </>
               }
               disablePadding >
               <StyledPaper>
-                  <ListItemButton role={undefined} onClick={(id) => props.onTodoClick(todo._id)} dense>
+                  <ListItemButton role={undefined} onClick={(event) => props.onTodoClick(props.item)} dense>
                     <ListItemIcon>
                         <Checkbox
                           edge="start"
