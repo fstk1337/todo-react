@@ -27,8 +27,8 @@ const ConfirmDeleteDialog:FC<ConfirmDeleteDialogProps> = (props) => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant='outlined' color='secondary' onClick={props.onReject}>Disagree</Button>
-                    <Button variant='contained' color='primary' onClick={props.onConfirm} autoFocus>Agree</Button>
+                    <Button variant='contained' color='primary' onClick={props.onConfirm} autoFocus>Delete</Button>
+                    <Button variant='outlined' color='secondary' onClick={props.onReject}>Cancel</Button>
                 </DialogActions>
             </Dialog>
         </div>

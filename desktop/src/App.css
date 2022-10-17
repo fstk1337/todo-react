@@ -15,3 +15,11 @@ html {
     font-weight: 400;
     line-height: 120%;
 }
+
+body {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    align-items: center;
+    padding-top: 10vh;
+}

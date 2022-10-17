@@ -43,11 +43,17 @@ const addTodo = (todo: ITodo):TodoAction => ({
     payload: { todo }
 });
 
+const updateDescription = (id: string, description: string):TodoAction => ({
+    type: TodoActionType.UPDATE_TODO,
+    payload: {id, message: description }
+});
+
 export default {
     todosLoadStart,
     todosLoadSuccess,
     todosLoadError,
     todoToggleComplete,
     deleteTodo,
-    addTodo
+    addTodo,
+    updateDescription
 };

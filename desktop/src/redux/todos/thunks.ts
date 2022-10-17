@@ -1,7 +1,7 @@
 import TodoService from "../../services/api/todo.service";
 import { IPoorTodo, ITodo } from "../../services/api/todo.types";
-import { AppDispatch } from "../store";
-import actions from "./actions"
+import store, { AppDispatch } from "../store";
+import actions from "./actions";
 
 export const loadTodos = () => (dispatch: AppDispatch) => {
     dispatch(actions.todosLoadStart());
@@ -36,6 +36,17 @@ export const addTodo = (todo: IPoorTodo) => (dispatch: AppDispatch) => {
             const newTodo:ITodo = response.data.todo;
             dispatch(actions.addTodo(newTodo));
             console.log(`todo with id #${newTodo._id} created`);
+        })
+        .catch(error => console.log(error));
+};
+
+export const editTodoDescription = (id: string, description: string) => (dispatch: AppDispatch) => {
+    const todo:IPoorTodo = store.getState().todos.find((todo: ITodo) => todo._id === id) || {_id: id, description};
+    const updatedTodo:IPoorTodo = {...todo, description};
+    TodoService.update(updatedTodo)
+        .then(response => {
+            console.log(`todo #${id} description updated`);
+            dispatch(actions.updateDescription(id, description));
         })
         .catch(error => console.log(error));
 };

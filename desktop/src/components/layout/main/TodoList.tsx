@@ -1,4 +1,4 @@
-import { Container, Typography } from "@mui/material";
+import { Container } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import TodoItem from "./TodoItem";
 import { useEffect } from "react";
@@ -29,9 +29,6 @@ const TodoList = () => {
         dispatch(loadTodos());
     }, []);
 
-    const handleTodoClick = (todo: ITodo) => dispatch(todoToggleComplete(todo));
-    const handleDeleteClick = (id: string) => dispatch(deleteTodo(id));
-
     return (
         <StyledWrapper>
             { isLoading ? <StatusMessage>Loading...</StatusMessage>
@@ -41,8 +38,8 @@ const TodoList = () => {
                 return <TodoItem 
                     key={todo._id} 
                     item={todo}
-                    onTodoClick={(todo: ITodo) => handleTodoClick(todo)}
-                    onDeleteClick={(id: string) => handleDeleteClick(id)}
+                    onTodoClick={(todo: ITodo) => dispatch(todoToggleComplete(todo))}
+                    onDeleteClick={(id: string) => dispatch(deleteTodo(id))}
                 />
             }) }
         </StyledWrapper>

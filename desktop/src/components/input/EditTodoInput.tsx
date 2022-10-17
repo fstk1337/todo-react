@@ -4,7 +4,7 @@ import { ChangeEvent, EventHandler, FC, useState } from 'react';
 
 const StyledTextField = styled(TextField)`
     margin-right: 10px;
-    width: 80%;
+    min-width: 350px;
     & input {
         font-family: 'Roboto', Verdana, sans-serif;
         font-weight: 400;
