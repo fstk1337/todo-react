@@ -6,9 +6,10 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import DoneIcon from '@mui/icons-material/Done';
 
 import { styled } from "@mui/material/styles";
-import { PoorTodo } from '../../../services/api/todo';
+import { IPoorTodo } from '../../../services/api/todo.types';
 import { useDispatch, useSelector } from "react-redux";
 import EditTodoInput from "../../input/EditTodoInput";
+import { IState } from "../../../redux/todos/initialState";
 
 interface TodoItemProps {
     id: string,
@@ -41,9 +42,9 @@ const StyledForm = styled('form')`
 
 const TodoItem: FC<TodoItemProps> = (props) => {
     const dispatch = useDispatch();
-    const todo: PoorTodo = useSelector((state: Array<PoorTodo>) => {
-      const index = state.findIndex((todo: PoorTodo) => todo._id === props.id);
-      return state[index];
+    const todo: IPoorTodo = useSelector((state: IState) => {
+      const index = state.todos.findIndex((todo: IPoorTodo) => todo._id === props.id);
+      return state.todos[index];
     });
     const [text, setText] = useState(todo.description);
     const [editing, setEditing]: [boolean, Function] = useState(false);
@@ -65,7 +66,7 @@ const TodoItem: FC<TodoItemProps> = (props) => {
 
   const handleSubmit: FormEventHandler = (event: FormEvent) => {
       event.preventDefault();
-      const newTodo:PoorTodo = {...todo, description: text};
+      const newTodo:IPoorTodo = {...todo, description: text};
       dispatch({type: 'UPDATE_TODO', payload: {...newTodo}});
       setEditing(false);
       console.log('submit');

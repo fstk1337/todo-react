@@ -1,11 +1,11 @@
 import { Container, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import TodoItem from "./TodoItem";
-import api from '../../../services/api';
-import { useEffect, useState } from "react";
-import { PoorTodo } from "../../../services/api/todo";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllTodos } from "../../../store/actions";
+import { IState } from "../../../redux/todos/initialState";
+import { useEffect } from "react";
+import { loadTodos } from "../../../redux/todos/thunks";
+import { useAppSelector, useAppDispatch } from "../../../redux/store/hooks";
+import store from "../../../redux/store";
 
 interface Todo {
     "_id": string,
@@ -35,22 +35,23 @@ const EmptyListMessage = styled(Typography)`
 `
 
 const TodoList = () => {
-    const dispatch = useDispatch();
-    const todos:Array<PoorTodo> = useSelector((state:Array<PoorTodo>) => state);
+    const dispatch = useAppDispatch();
+    const {isLoading, todos, errorMessage} = useAppSelector((state:IState) => state);
+
+    useEffect(() => {
+        dispatch(loadTodos());
+    }, []);
 
     const toggleCompleted = (todoId: string) => {
-        const todo = {...todos[todos.findIndex((todo) => todo._id === todoId)]};
-        todo.status = todo.status === 'completed' ? 'active' : 'completed';
-        dispatch({type: 'TOGGLE_COMPLETED', payload: {...todo}});
     };
 
     const deleteTodo = (todoId: string) => {
-        dispatch({type: 'DELETE_TODO', payload: { _id: todoId }});
     };
 
     return (
         <StyledWrapper>
-            {   
+            { isLoading && <h3>Loading...</h3> }
+            {
                 todos.map((todo) => {
                     return <TodoItem 
                         key={todo._id} 

@@ -2,8 +2,7 @@ import NewTodoInput from '../../input/NewTodoInput';
 import AddTodoButton from '../../button/AddTodoButton';
 import { ChangeEvent, EventHandler, FormEvent, FormEventHandler, useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { useDispatch, useSelector } from 'react-redux';
-import { createTodo } from '../../../store/actions';
+import { useDispatch } from 'react-redux';
 
 const StyledForm = styled('form')`
     display: inline-flex;
