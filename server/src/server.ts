@@ -1,4 +1,4 @@
-import express, { response } from "express";
+import express from "express";
 import http from 'http';
 import mongoose from "mongoose";
 import { config } from "./config/config";
@@ -28,7 +28,7 @@ const startServer = () => {
 
     server.use((request, response, next) => {
         response.header('Access-Control-Allow-Origin', '*');
-        response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+        response.header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS, PATCH');
         response.header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');
         next();
     });
