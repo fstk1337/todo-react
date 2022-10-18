@@ -1,5 +1,6 @@
-import { styled } from '@mui/material/styles';
 import { FC } from 'react';
+
+import { styled } from '@mui/material/styles';
 
 const StyledHeading = styled('h1')`
     font-size: 30px;
@@ -12,7 +13,7 @@ interface MainHeadingProps {
 
 const MainHeading: FC<MainHeadingProps> = ({ text }) => {
     return (
-        <StyledHeading>{ text }</StyledHeading>
+        <StyledHeading>{text}</StyledHeading>
     );
 };
 

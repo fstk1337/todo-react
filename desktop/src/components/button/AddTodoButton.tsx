@@ -1,6 +1,7 @@
+import { FC } from 'react';
+
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { FC } from 'react';
 
 const StyledButton = styled(Button)`
     padding: 10px;
@@ -11,9 +12,8 @@ interface AddTodoButtonProps {
 }
 
 const AddTodoButton:FC<AddTodoButtonProps> = (props) => {
-
     return (
-        <StyledButton variant="contained" type="submit" disabled={ props.disabled }>
+        <StyledButton variant="contained" type="submit" disabled={props.disabled}>
             Add
         </StyledButton>
     );

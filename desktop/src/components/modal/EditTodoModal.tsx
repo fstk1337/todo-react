@@ -6,34 +6,34 @@ import { styled } from "@mui/material/styles";
 import EditTodoInput from "../input/EditTodoInput";
 
 const StyledBox = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 600px;
-  min-height: 80px;
-  background-color: #fff;
-  border: 2px solid #000;
-  box-shadow: 24px;
-  padding: 30px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 600px;
+    min-height: 80px;
+    background-color: #fff;
+    border: 2px solid #000;
+    box-shadow: 24px;
+    padding: 30px 40px;
 `;
 
 const StyledForm = styled('form')`
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: flex-end;
-  width: 100%;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-end;
+    width: 100%;
 `;
 
 const StyledHeading = styled('h2')`
-  margin-bottom: 20px;
-  font-size: 22px;
-  font-weight: 500;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 500;
 `;
 
 interface EditTodoModalProps {

@@ -1,6 +1,7 @@
 import { FC, ReactNode } from "react";
+
 import { styled } from "@mui/material/styles";
-import { Accordion, AccordionDetails, AccordionSummary, Stack, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 
 const StyledAccordion = styled(Accordion)`
     width: 500px;

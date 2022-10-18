@@ -25,30 +25,31 @@ const StyledWrapper = styled(Container)`
 `;
 
 const StyledPaper = styled(Paper)`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  border-radius: 15px;
-  min-height: 50px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-radius: 15px;
+    min-height: 50px;
 `;
 
 
 const TodoItem: FC<TodoItemProps> = (props) => {
-    const dispatch = useAppDispatch();
     const todo = {...props.item };
+
 	const [text, setText] = useState<string>(todo.description);
     const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
     const [editOpen, setEditOpen] = useState<boolean>(false);
-
-    const handleSubmit: FormEventHandler = (event: FormEvent) => {
-		event.preventDefault();
-		dispatch(editTodoDescription(todo._id, text));
-		setEditOpen(false);
-	}
+    const dispatch = useAppDispatch();
 
     const handleInputChange: EventHandler<ChangeEvent> = (event: ChangeEvent<HTMLInputElement>) => {
         setText(event.target.value);
     };
+
+    const confirmEdit: FormEventHandler = (event: FormEvent) => {
+		event.preventDefault();
+		dispatch(editTodoDescription(todo._id, text));
+		setEditOpen(false);
+	}
 	
 	const cancelEdit = () => {
 		setText(todo.description);
@@ -116,7 +117,7 @@ const TodoItem: FC<TodoItemProps> = (props) => {
             id={todo._id}
 			description={text}
 			onChange={handleInputChange}
-			onConfirm={handleSubmit}
+			onConfirm={confirmEdit}
 			onReject={cancelEdit}
           />
           <ConfirmDeleteDialog
