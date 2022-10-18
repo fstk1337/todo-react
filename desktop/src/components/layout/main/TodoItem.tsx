@@ -1,16 +1,15 @@
-import React, { useState, FC, ChangeEvent, EventHandler, FormEventHandler, FormEvent } from "react";
-import { Backdrop, Box, Button, Checkbox, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Modal, Paper } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CancelIcon from '@mui/icons-material/Cancel';
-import DoneIcon from '@mui/icons-material/Done';
+import { useState, FC, ChangeEvent, EventHandler, FormEventHandler, FormEvent } from "react";
+import { useAppDispatch } from "../../../redux/store/hooks";
+import { editTodoDescription } from "../../../redux/todos/thunks";
+import { ITodo } from "../../../services/api/todo.types";
 
 import { styled } from "@mui/material/styles";
-import EditTodoInput from "../../input/EditTodoInput";
-import { useAppDispatch } from "../../../redux/store/hooks";
-import ConfirmDeleteDialog from "../../dialog/ConfirmDeleteDialog";
-import { ITodo } from "../../../services/api/todo.types";
-import { editTodoDescription } from "../../../redux/todos/thunks";
+import { Checkbox, Container, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+import ConfirmDeleteDialog from "../../modal/ConfirmDeleteDialog";
+import EditTodoModal from "../../modal/EditTodoModal";
 
 interface TodoItemProps {
     item: ITodo,
@@ -33,89 +32,68 @@ const StyledPaper = styled(Paper)`
   min-height: 50px;
 `;
 
-const StyledBox = styled(Box)`
-  display: flex;
-  align-items: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 600px;
-  min-height: 80px;
-  background-color: #fff;
-  border: 2px solid #000;
-  box-shadow: 24px;
-  padding: 4px;
-`;
-
-const StyledForm = styled('form')`
-  display: inline-flex;
-  justify-content: space-around;
-  align-items: center;
-  padding-left: 30px;
-  width: 100%;
-`;
 
 const TodoItem: FC<TodoItemProps> = (props) => {
     const dispatch = useAppDispatch();
     const todo = {...props.item };
-    const [text, setText] = useState(todo.description);
+	const [text, setText] = useState<string>(todo.description);
     const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
     const [editOpen, setEditOpen] = useState<boolean>(false);
-    const [editing, setEditing]: [boolean, Function] = useState(false);
 
-    const handleEditClick = (id: string) => {
-      setEditOpen(true);
-      setEditing(true);
+    const handleSubmit: FormEventHandler = (event: FormEvent) => {
+		event.preventDefault();
+		dispatch(editTodoDescription(todo._id, text));
+		setEditOpen(false);
+	}
+
+    const handleInputChange: EventHandler<ChangeEvent> = (event: ChangeEvent<HTMLInputElement>) => {
+        setText(event.target.value);
     };
+	
+	const cancelEdit = () => {
+		setText(todo.description);
+		setEditOpen(false);
+	}
 
-    const handleCancelClick = (id: string) => {
-      setText(todo.description);
-    };
+	const confirmDelete = () => {
+		props.onDeleteClick(props.item._id);
+		setDeleteOpen(false);
+	};
 
-    const handleChange: EventHandler<ChangeEvent> = (event: ChangeEvent<HTMLInputElement>) => {
-      setText(event.target.value);
-  };
-
-  const handleSubmit: FormEventHandler = (event: FormEvent) => {
-      event.preventDefault();
-      dispatch(editTodoDescription(todo._id, text));
-      setEditing(false);
-      setEditOpen(false);
-  }
-
-  const confirmDelete = () => {
-      props.onDeleteClick(props.item._id);
-      setDeleteOpen(false);
-  };
-
-  const cancelDelete = () => {
-      setDeleteOpen(false);
-  };
-
-  const cancelEdit = () => {
-    setText(todo.description);
-    setEditing(false);
-    setEditOpen(false);
-  }
+	const cancelDelete = () => {
+		setDeleteOpen(false);
+	};
 
     return (
         <StyledWrapper>
           <ListItem
               key={todo._id}
-              secondaryAction={ !editing &&
+              disablePadding
+              secondaryAction={
                 <>
-                  <IconButton edge="end" aria-label="edit" onClick={(event) => handleEditClick(todo._id)}>
+                  <IconButton
+				  	edge="end"
+					aria-label="edit"
+					onClick={(event) => setEditOpen(true)}
+				  >
                     <EditIcon />
                   </IconButton>
-                  <IconButton edge="end" aria-label="delete" onClick={(event) => setDeleteOpen(true)}>
+                  <IconButton
+				     edge="end"
+					 aria-label="delete"
+					 onClick={(event) => setDeleteOpen(true)}
+				  >
                     <DeleteIcon />
                   </IconButton>
                 </>
               }
-              disablePadding >
+			>
               <StyledPaper>
-                  <ListItemButton role={undefined} onClick={(event) => props.onTodoClick(props.item)} dense>
+                  <ListItemButton
+				  	role={undefined}
+					onClick={(event) => props.onTodoClick(props.item)}
+					dense
+				  >
                     <ListItemIcon>
                         <Checkbox
                           edge="start"
@@ -132,25 +110,15 @@ const TodoItem: FC<TodoItemProps> = (props) => {
                     />
                   </ListItemButton>
               </StyledPaper>
-              <Modal
-                open={editOpen}
-                onClose={cancelEdit}
-                aria-describedby={`form-${todo._id}`}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                  timeout: 500,
-                }}
-              >
-                <StyledBox>
-                    <StyledForm id={`form-${todo._id}`} onSubmit={handleSubmit}>
-                      <EditTodoInput text={text} onChange={(event: ChangeEvent) => handleChange(event)} />
-                      <Button variant='contained' form={`form-${todo._id}`} type='submit' color='primary' autoFocus>Confirm</Button>
-                      <Button variant='outlined' color='secondary' onClick={cancelEdit}>Cancel</Button>
-                    </StyledForm>
-                </StyledBox>
-              </Modal>
           </ListItem>
+          <EditTodoModal
+            isOpen={editOpen}
+            id={todo._id}
+			description={text}
+			onChange={handleInputChange}
+			onConfirm={handleSubmit}
+			onReject={cancelEdit}
+          />
           <ConfirmDeleteDialog
             isOpen={deleteOpen}
             description={todo.description}

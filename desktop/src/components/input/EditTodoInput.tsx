@@ -1,14 +1,15 @@
 import { TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { ChangeEvent, EventHandler, FC, useState } from 'react';
+import { FC } from 'react';
 
 const StyledTextField = styled(TextField)`
-    margin-right: 10px;
-    min-width: 350px;
+    min-width: 500px;
+    margin-bottom: 20px;
+    align-self: center;
     & input {
         font-family: 'Roboto', Verdana, sans-serif;
         font-weight: 400;
-        font-size: 16px;
+        font-size: 18px;
     }
 `;
 
@@ -24,7 +25,7 @@ const EditTodoInput: FC<EditTodoInputProps> = (props) => {
             variant='standard'
             value={props.text}
             onChange={(event) => props.onChange(event)}
-            InputProps={{ disableUnderline: true, autoFocus: true, }}
+            InputProps={{ disableUnderline: false, autoFocus: true }}
         />
     );
 };
