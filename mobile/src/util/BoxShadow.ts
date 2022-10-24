@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import { Platform } from "react-native";
 
 const createBoxShadow = (
